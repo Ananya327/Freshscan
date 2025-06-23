@@ -1,3 +1,4 @@
+# detector/views.py
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
@@ -9,17 +10,18 @@ def index(request):
 
 def detect(request):
     if request.method == 'POST' and request.FILES.get('image'):
-        image = request.FILES['image']
+        uploaded_file = request.FILES['image']
         fs = FileSystemStorage()
-        filename = fs.save(image.name, image)
-        image_url = fs.url(filename)
+        filename = fs.save(uploaded_file.name, uploaded_file)
+        file_url = fs.url(filename)
+        file_path = fs.path(filename)
 
-        # Predict using dummy model
-        prediction, calorie = predict_fruit_or_vegetable(fs.path(filename))
+        label, calories = predict_fruit_or_vegetable(file_path)
 
         return render(request, 'result.html', {
-            'image_url': image_url,
-            'prediction': prediction,
-            'calorie': calorie
+            'label': label,
+            'calories': calories,
+            'image_url': file_url
         })
+
     return render(request, 'upload.html')
