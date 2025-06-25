@@ -1,154 +1,54 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>FreshScan | Home</title>
+    <title>FreshScan - Fruit & Vegetable Detection</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background-image: url('{% static "images/interface.jpg" %}');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-        }
-
-        nav {
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            position: absolute;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-        }
-
-        nav .brand {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-        }
-
-        .quote-container {
-            position: absolute;
-            bottom: -200px; /* Start from bottom */
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px 40px;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f2f2f2;
             text-align: center;
-            transition: bottom 1.5s ease-in-out, opacity 1s ease-in-out;
-            opacity: 0;
         }
-
-        .quote-container.show {
-            bottom: 40%;
-            opacity: 1;
+        h1 {
+            color: #27ae60;
         }
-
-        .quote-container.hide {
-            opacity: 0;
+        form {
+            margin: 20px 0;
         }
-
-        .quote-text h2 {
-            color: #2e7d32;
-            font-size: 28px;
+        input[type="file"] {
             margin-bottom: 10px;
         }
-
-        .quote-text p {
-            font-size: 18px;
-            color: #333;
-        }
-
-        .button-container {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .button-container.show {
-            opacity: 1;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            background-color: #2e7d32;
-            color: white;
-            border: none;
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            display: inline-block;
             border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
-        .btn:hover {
-            background-color: #1b5e20;
+        img {
+            max-width: 300px;
+            margin-top: 15px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="brand">🌿 FreshScan</div>
-        <div>
-            <a href="/">Home</a>
-            <a href="/about/">About Us</a>
-            <a href="/contact/">Contact</a>
+    <h1>FreshScan 🍎🥕</h1>
+    <p>Upload an image to detect the fruit or vegetable and estimate its calories.</p>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="image" accept="image/*" required><br>
+        <button type="submit">Detect</button>
+    </form>
+
+    {% if label %}
+        <div class="result">
+            <h3>Prediction: {{ label }}</h3>
+            <p>Estimated Calories (per 100g): <strong>{{ calories }} kcal</strong></p>
+            <img src="{{ image_url }}" alt="Uploaded Image">
         </div>
-    </nav>
-
-    <section class="quote-container" id="quoteContainer">
-        <div class="quote-text">
-            <h2>“सर्वे भवन्तु सुखिनः”</h2>
-            <p>Yuktāhāra-vihārasya yukta-ceṣṭasya karmasu
-Yukta-svapnāvabodhasya yogo bhavati duḥkha-hā. 🌿
-            </p>
-        </div>
-    </section>
-
-    <section class="button-container" id="buttonContainer">
-        <form method="POST" action="/detect/">
-            {% csrf_token %}
-            <button class="btn" type="submit">Start FreshScan Detection</button>
-        </form>
-    </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const quoteContainer = document.getElementById('quoteContainer');
-            const buttonContainer = document.getElementById('buttonContainer');
-
-            // Show quote after 1s
-            setTimeout(() => {
-                quoteContainer.classList.add('show');
-            }, 1000);
-
-            // Hide quote after 4s
-            setTimeout(() => {
-                quoteContainer.classList.remove('show');
-                quoteContainer.classList.add('hide');
-            }, 5000);
-
-            // Show button after 5s
-            setTimeout(() => {
-                buttonContainer.classList.add('show');
-            }, 5500);
-        });
-    </script>
+    {% endif %}
 </body>
 </html>
