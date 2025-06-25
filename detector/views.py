@@ -1,27 +1,25 @@
 # detector/views.py
+
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseRedirect
 from .model import predict_fruit_or_vegetable
-import os
 
 def index(request):
-    return render(request, 'index.html')
-
-def detect(request):
+    context = {}
     if request.method == 'POST' and request.FILES.get('image'):
-        uploaded_file = request.FILES['image']
+        image = request.FILES['image']
         fs = FileSystemStorage()
-        filename = fs.save(uploaded_file.name, uploaded_file)
-        file_url = fs.url(filename)
-        file_path = fs.path(filename)
+        filename = fs.save(image.name, image)
+        uploaded_file_url = fs.url(filename)
 
-        label, calories = predict_fruit_or_vegetable(file_path)
+        # Call prediction function
+        full_image_path = fs.path(filename)
+        label, calories = predict_fruit_or_vegetable(full_image_path)
 
-        return render(request, 'result.html', {
+        context = {
+            'uploaded_file_url': uploaded_file_url,
             'label': label,
             'calories': calories,
-            'image_url': file_url
-        })
+        }
 
-    return render(request, 'upload.html')
+    return render(request, 'index.html', context)
