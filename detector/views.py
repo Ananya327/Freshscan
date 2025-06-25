@@ -1,25 +1,34 @@
 # detector/views.py
 
 from django.shortcuts import render
-from django.core.files.storage import FileSystemStorage
 from .model import predict_fruit_or_vegetable
+import os
+import uuid
 
 def index(request):
-    context = {}
+    return render(request, 'index.html')
+
+def result(request):
     if request.method == 'POST' and request.FILES.get('image'):
         image = request.FILES['image']
-        fs = FileSystemStorage()
-        filename = fs.save(image.name, image)
-        uploaded_file_url = fs.url(filename)
 
-        # Call prediction function
-        full_image_path = fs.path(filename)
-        label, calories = predict_fruit_or_vegetable(full_image_path)
+        # Ensure unique filename using UUID
+        filename = f"{uuid.uuid4().hex}_{image.name}"
+        image_path = os.path.join('detector', 'static', filename)
 
-        context = {
-            'uploaded_file_url': uploaded_file_url,
+        # Save uploaded image
+        with open(image_path, 'wb+') as f:
+            for chunk in image.chunks():
+                f.write(chunk)
+
+        # Run prediction
+        label, calories = predict_fruit_or_vegetable(image_path)
+
+        # Return result to template
+        return render(request, 'result.html', {
             'label': label,
             'calories': calories,
-        }
+            'image_url': '/static/' + filename
+        })
 
-    return render(request, 'index.html', context)
+    return render(request, 'index.html')
