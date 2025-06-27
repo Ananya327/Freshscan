@@ -1,45 +1,44 @@
 # detector/report_generator.py
 
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from datetime import datetime
+from PIL import Image
 import os
-import wikipedia
 
-def generate_pdf(image_path, label, calories, output_path='detector/static/report.pdf'):
-    c = canvas.Canvas(output_path, pagesize=A4)
-    width, height = A4
-
+def generate_report(image_path, label, calories, nutrition_summary=""):
+    report_path = "detector/static/report.pdf"
+    c = canvas.Canvas(report_path, pagesize=letter)
+    
     # Title
-    c.setFont("Helvetica-Bold", 20)
-    c.drawString(50, height - 50, "🍎 FreshScan - Prediction Report")
-
-    # Date & Time
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    c.setFont("Helvetica", 12)
-    c.drawString(50, height - 90, f"Date & Time: {now}")
-
-    # Predicted label
-    c.drawString(50, height - 120, f"Prediction: {label}")
-
-    # Calories
-    c.drawString(50, height - 140, f"Estimated Calories: {calories} kcal")
-
-    # Nutrition facts (from Wikipedia)
-    try:
-        summary = wikipedia.summary(label, sentences=2)
-        c.drawString(50, height - 180, "Nutrition Info:")
-        text_obj = c.beginText(50, height - 200)
-        text_obj.setFont("Helvetica", 10)
-        for line in summary.split('\n'):
-            text_obj.textLine(line)
-        c.drawText(text_obj)
-    except Exception as e:
-        c.drawString(50, height - 180, "Nutrition Info: Not available.")
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, 750, "FreshScan - Fruit & Vegetable Report")
 
     # Image
     if os.path.exists(image_path):
-        c.drawImage(image_path, 300, height - 300, width=200, preserveAspectRatio=True)
+        try:
+            img = Image.open(image_path)
+            img.thumbnail((200, 200))
+            img_path_temp = "detector/static/temp_image.jpg"
+            img.save(img_path_temp)
+            c.drawImage(img_path_temp, 50, 520, width=150, height=150)
+        except:
+            c.drawString(50, 520, "Image could not be displayed.")
+
+    # Prediction info
+    c.setFont("Helvetica", 12)
+    c.drawString(50, 480, f"Predicted Label: {label}")
+    c.drawString(50, 460, f"Estimated Calories (per 100g): {calories} kcal")
+    c.drawString(50, 440, f"Date & Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    # Nutrition summary
+    if nutrition_summary:
+        c.drawString(50, 410, "Nutrition Info (from Wikipedia):")
+        text = c.beginText(50, 390)
+        text.setFont("Helvetica", 10)
+        for line in nutrition_summary.split("\n"):
+            text.textLine(line)
+        c.drawText(text)
 
     c.save()
-    return output_path
+    return report_path
