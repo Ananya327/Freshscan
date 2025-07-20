@@ -7,48 +7,114 @@
             font-family: Arial, sans-serif;
             padding: 30px;
             background-color: #f2f2f2;
-            text-align: center;
         }
         h1 {
+            text-align: center;
             color: #27ae60;
         }
-        form {
-            margin: 20px 0;
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
         }
-        input[type="file"] {
-            margin-bottom: 10px;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff;
-            display: inline-block;
-            border-radius: 8px;
+        .left-panel, .right-panel {
+            width: 48%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        .result, .report {
+            margin-top: 20px;
+        }
         img {
-            max-width: 300px;
-            margin-top: 15px;
+            max-width: 100%;
             border-radius: 8px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #2ecc71;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #27ae60;
+        }
+        .btn-download {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-download:hover {
+            background-color: #2980b9;
+        }
+        ul {
+            text-align: left;
+            padding-left: 20px;
         }
     </style>
 </head>
 <body>
     <h1>FreshScan 🍎🥕</h1>
-    <p>Upload an image to detect the fruit or vegetable and estimate its calories.</p>
-    
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="image" accept="image/*" required><br>
-        <button type="submit">Detect</button>
-    </form>
+    <p style="text-align:center;">Upload an image to detect the fruit or vegetable and view nutritional details.</p>
 
-    {% if label %}
-        <div class="result">
-            <h3>Prediction: {{ label }}</h3>
-            <p>Estimated Calories (per 100g): <strong>{{ calories }} kcal</strong></p>
-            <img src="{{ image_url }}" alt="Uploaded Image">
+    <div class="main-container">
+        <!-- Left: Upload & Detection -->
+        <div class="left-panel">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="image" accept="image/*" required><br><br>
+                <button type="submit">Detect</button>
+            </form>
+
+            {% if label %}
+            <div class="result">
+                <h3>Prediction: {{ label }}</h3>
+                <p>Estimated Calories (per 100g): <strong>{{ calories }} kcal</strong></p>
+
+                {% if image_url %}
+                    <img src="{{ image_url }}" alt="Uploaded Image">
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
-    {% endif %}
+
+        <!-- Right: Nutrition Report -->
+        <div class="right-panel">
+           {% if nutrition_info %}
+    <div class="report">
+        <h3>Nutritional Report</h3>
+
+        {% if nutrition_info.error %}
+            <p style="color:red;">{{ nutrition_info.error }}</p>
+        {% elif label_key == "not matching" %}
+            <p style="color:red;">Image not recognized. Please try with a clear fruit or vegetable image.</p>
+        {% else %}
+            <ul>
+                {% for key, value in nutrition_info.items %}
+                    {% if key != 'purpose' %}
+                        <li><strong>{{ key|title }}:</strong> {{ value }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <p><strong>Purpose:</strong> <em>{{ nutrition_info.purpose }}</em></p>
+
+            {% if pdf_url %}
+                <a href="{{ pdf_url }}" class="btn-download" download>📄 Download PDF Report</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endif %}
+
+        </div>
+    </div>
 </body>
 </html>

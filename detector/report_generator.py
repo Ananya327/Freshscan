@@ -1,132 +1,203 @@
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-import os
-import datetime
+# detector/report_generator.py
 
-# Step 1: Nutrition Data with Purpose
+import os
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
+import wikipedia
+
 nutrition_map = {
     'apple': {
-        'calories': 52,
-        'protein': '0.3g',
-        'vitamin C': '7mg',
-        'fiber': '2.4g',
-        'sugar': '10g',
-        'purpose': 'Boosts immunity and supports heart health.'
+        'calories': 52, 'carbohydrates': '14g', 'fat': '0.2g', 'protein': '0.3g',
+        'fiber': '2.4g', 'vitamins': 'Vitamin C, K', 'purpose': 'Supports heart health and weight loss.'
     },
     'banana': {
-        'calories': 96,
-        'protein': '1.3g',
-        'vitamin C': '8.7mg',
-        'fiber': '2.6g',
-        'sugar': '12g',
-        'purpose': 'Provides instant energy and supports digestion.'
+        'calories': 96, 'carbohydrates': '27g', 'fat': '0.3g', 'protein': '1.3g',
+        'fiber': '2.6g', 'vitamins': 'Vitamin B6, C', 'purpose': 'Provides energy and supports digestion.'
     },
-    'tomato': {
-        'calories': 18,
-        'protein': '0.9g',
-        'vitamin C': '14mg',
-        'fiber': '1.2g',
-        'sugar': '2.6g',
-        'purpose': 'Rich in antioxidants and supports skin health.'
+    'beetroot': {
+        'calories': 43, 'carbohydrates': '9.6g', 'fat': '0.2g', 'protein': '1.6g',
+        'fiber': '2.8g', 'vitamins': 'Vitamin C, Folate', 'purpose': 'Supports blood pressure and stamina.'
+    },
+    'bell pepper': {
+        'calories': 31, 'carbohydrates': '6g', 'fat': '0.3g', 'protein': '1g',
+        'fiber': '2.1g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts immunity and eye health.'
+    },
+    'cabbage': {
+        'calories': 25, 'carbohydrates': '6g', 'fat': '0.1g', 'protein': '1.3g',
+        'fiber': '2.5g', 'vitamins': 'Vitamin C, K', 'purpose': 'Promotes digestion and reduces inflammation.'
+    },
+    'capsicum': {
+        'calories': 20, 'carbohydrates': '4.7g', 'fat': '0.2g', 'protein': '0.9g',
+        'fiber': '1.7g', 'vitamins': 'Vitamin C, A', 'purpose': 'Supports metabolism and immune health.'
     },
     'carrot': {
-        'calories': 41,
-        'protein': '0.9g',
-        'vitamin A': '835µg',
-        'fiber': '2.8g',
-        'sugar': '4.7g',
-        'purpose': 'Improves eyesight and skin glow.'
+        'calories': 41, 'carbohydrates': '10g', 'fat': '0.2g', 'protein': '0.9g',
+        'fiber': '2.8g', 'vitamins': 'Vitamin A, K1', 'purpose': 'Good for eye health and immunity.'
     },
-    'potato': {
-        'calories': 77,
-        'protein': '2g',
-        'vitamin C': '20mg',
-        'fiber': '2.2g',
-        'sugar': '1.2g',
-        'purpose': 'Provides energy and supports brain health.'
+    'cauliflower': {
+        'calories': 25, 'carbohydrates': '5g', 'fat': '0.3g', 'protein': '2g',
+        'fiber': '2g', 'vitamins': 'Vitamin C, K', 'purpose': 'Supports digestion and detoxification.'
+    },
+    'chilli pepper': {
+        'calories': 40, 'carbohydrates': '9g', 'fat': '0.4g', 'protein': '2g',
+        'fiber': '1.5g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts metabolism and reduces pain.'
+    },
+    'corn': {
+        'calories': 96, 'carbohydrates': '21g', 'fat': '1.5g', 'protein': '3.4g',
+        'fiber': '2.7g', 'vitamins': 'Vitamin B3, B5', 'purpose': 'Provides energy and aids digestion.'
     },
     'cucumber': {
-        'calories': 16,
-        'protein': '0.7g',
-        'vitamin K': '16.4µg',
-        'fiber': '0.5g',
-        'sugar': '1.7g',
-        'purpose': 'Keeps body hydrated and cool.'
+        'calories': 16, 'carbohydrates': '3.6g', 'fat': '0.1g', 'protein': '0.7g',
+        'fiber': '0.5g', 'vitamins': 'Vitamin K, C', 'purpose': 'Hydrates and supports skin health.'
     },
-    'orange': {
-        'calories': 47,
-        'protein': '0.9g',
-        'vitamin C': '53.2mg',
-        'fiber': '2.4g',
-        'sugar': '9g',
-        'purpose': 'Boosts immune system and refreshes body.'
+    'eggplant': {
+        'calories': 24, 'carbohydrates': '5.7g', 'fat': '0.2g', 'protein': '1g',
+        'fiber': '3g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Lowers cholesterol and supports weight loss.'
+    },
+    'garlic': {
+        'calories': 149, 'carbohydrates': '33g', 'fat': '0.5g', 'protein': '6.4g',
+        'fiber': '2.1g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts immunity and reduces blood pressure.'
+    },
+    'ginger': {
+        'calories': 80, 'carbohydrates': '18g', 'fat': '0.8g', 'protein': '1.8g',
+        'fiber': '2g', 'vitamins': 'Vitamin B6, C', 'purpose': 'Aids digestion and reduces nausea.'
     },
     'grapes': {
-        'calories': 67,
-        'protein': '0.6g',
-        'vitamin C': '3.2mg',
-        'fiber': '0.9g',
-        'sugar': '16g',
-        'purpose': 'Promotes heart health and reduces inflammation.'
+        'calories': 67, 'carbohydrates': '17g', 'fat': '0.4g', 'protein': '0.6g',
+        'fiber': '0.9g', 'vitamins': 'Vitamin C, K', 'purpose': 'Supports heart and brain health.'
+    },
+    'jalepeno': {
+        'calories': 29, 'carbohydrates': '6.5g', 'fat': '0.4g', 'protein': '0.9g',
+        'fiber': '2.8g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts metabolism and pain relief.'
+    },
+    'kiwi': {
+        'calories': 61, 'carbohydrates': '15g', 'fat': '0.5g', 'protein': '1.1g',
+        'fiber': '3g', 'vitamins': 'Vitamin C, K', 'purpose': 'Boosts immunity and digestion.'
+    },
+    'lemon': {
+        'calories': 29, 'carbohydrates': '9.3g', 'fat': '0.3g', 'protein': '1.1g',
+        'fiber': '2.8g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts immunity and detoxifies.'
+    },
+    'lettuce': {
+        'calories': 15, 'carbohydrates': '2.9g', 'fat': '0.2g', 'protein': '1.4g',
+        'fiber': '1.3g', 'vitamins': 'Vitamin A, K', 'purpose': 'Supports hydration and weight control.'
     },
     'mango': {
-        'calories': 60,
-        'protein': '0.8g',
-        'vitamin C': '36.4mg',
-        'fiber': '1.6g',
-        'sugar': '14g',
-        'purpose': 'Improves skin health and boosts immunity.'
+        'calories': 60, 'carbohydrates': '15g', 'fat': '0.4g', 'protein': '0.8g',
+        'fiber': '1.6g', 'vitamins': 'Vitamin A, C', 'purpose': 'Improves immunity and eye health.'
     },
-    'cherry': {
-        'calories': 50,
-        'protein': '1g',
-        'vitamin C': '7mg',
-        'fiber': '1.6g',
-        'sugar': '8g',
-        'purpose': 'Helps reduce inflammation and improves sleep.'
+    'onion': {
+        'calories': 40, 'carbohydrates': '9.3g', 'fat': '0.1g', 'protein': '1.1g',
+        'fiber': '1.7g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Supports heart health and immunity.'
+    },
+    'orange': {
+        'calories': 47, 'carbohydrates': '12g', 'fat': '0.1g', 'protein': '0.9g',
+        'fiber': '2.4g', 'vitamins': 'Vitamin C, B1', 'purpose': 'Boosts immune system and skin health.'
+    },
+    'paprika': {
+        'calories': 19, 'carbohydrates': '4.5g', 'fat': '0.3g', 'protein': '0.9g',
+        'fiber': '1.8g', 'vitamins': 'Vitamin A, E', 'purpose': 'Boosts eye health and immune function.'
+    },
+    'pear': {
+        'calories': 57, 'carbohydrates': '15g', 'fat': '0.1g', 'protein': '0.4g',
+        'fiber': '3.1g', 'vitamins': 'Vitamin C, K', 'purpose': 'Aids digestion and supports heart health.'
+    },
+    'peas': {
+        'calories': 81, 'carbohydrates': '14g', 'fat': '0.4g', 'protein': '5g',
+        'fiber': '5.7g', 'vitamins': 'Vitamin A, K', 'purpose': 'Supports digestion and immunity.'
+    },
+    'pineapple': {
+        'calories': 50, 'carbohydrates': '13g', 'fat': '0.1g', 'protein': '0.5g',
+        'fiber': '1.4g', 'vitamins': 'Vitamin C, B1', 'purpose': 'Aids digestion and reduces inflammation.'
+    },
+    'pomegranate': {
+        'calories': 83, 'carbohydrates': '19g', 'fat': '1.2g', 'protein': '1.7g',
+        'fiber': '4g', 'vitamins': 'Vitamin C, K', 'purpose': 'Boosts heart health and immunity.'
+    },
+    'potato': {
+        'calories': 77, 'carbohydrates': '17g', 'fat': '0.1g', 'protein': '2g',
+        'fiber': '2.2g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Provides energy and supports digestion.'
+    },
+    'raddish': {
+        'calories': 16, 'carbohydrates': '3.4g', 'fat': '0.1g', 'protein': '0.7g',
+        'fiber': '1.6g', 'vitamins': 'Vitamin C', 'purpose': 'Supports liver function and digestion.'
+    },
+    'soy beans': {
+        'calories': 446, 'carbohydrates': '30g', 'fat': '20g', 'protein': '36g',
+        'fiber': '9.3g', 'vitamins': 'Vitamin K, B9', 'purpose': 'Great source of protein and bone health.'
+    },
+    'spinach': {
+        'calories': 23, 'carbohydrates': '3.6g', 'fat': '0.4g', 'protein': '2.9g',
+        'fiber': '2.2g', 'vitamins': 'Vitamin A, C, K', 'purpose': 'Boosts iron levels and vision.'
+    },
+    'sweetcorn': {
+        'calories': 86, 'carbohydrates': '19g', 'fat': '1.2g', 'protein': '3.2g',
+        'fiber': '2.7g', 'vitamins': 'Vitamin C, B3', 'purpose': 'Supports digestion and energy.'
+    },
+    'sweetpotato': {
+        'calories': 86, 'carbohydrates': '20g', 'fat': '0.1g', 'protein': '1.6g',
+        'fiber': '3g', 'vitamins': 'Vitamin A, C', 'purpose': 'Good for digestion and blood sugar control.'
+    },
+    'tomato': {
+        'calories': 18, 'carbohydrates': '3.9g', 'fat': '0.2g', 'protein': '0.9g',
+        'fiber': '1.2g', 'vitamins': 'Vitamin C, K', 'purpose': 'Rich in antioxidants and supports heart health.'
+    },
+    'turnip': {
+        'calories': 28, 'carbohydrates': '6.4g', 'fat': '0.1g', 'protein': '0.9g',
+        'fiber': '1.8g', 'vitamins': 'Vitamin C', 'purpose': 'Aids digestion and supports bone health.'
+    },
+    'watermelon': {
+        'calories': 30, 'carbohydrates': '8g', 'fat': '0.2g', 'protein': '0.6g',
+        'fiber': '0.4g', 'vitamins': 'Vitamin C, A', 'purpose': 'Hydrating and supports heart health.'
     }
 }
 
-# Step 2: Nutrition lookup function (handles fuzzy match too)
+
+
 def get_nutrition_info(label):
     label = label.lower().strip()
-    for key in nutrition_map:
-        if key in label:
-            return nutrition_map[key]
+    if label in nutrition_map:
+        return nutrition_map[label]
     return {'error': 'No nutrition info found for this item.'}
 
-# Step 3: Generate the report
-def generate_report(image_path, label, nutrition_data):
-    pdf_name = f'detector/static/reports/{label}_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
-    os.makedirs(os.path.dirname(pdf_name), exist_ok=True)
+def get_wikipedia_summary(label):
+    try:
+        return wikipedia.summary(label, sentences=2)
+    except:
+        return "Wikipedia info not available."
 
-    c = canvas.Canvas(pdf_name, pagesize=letter)
-    c.setFont("Helvetica-Bold", 18)
-    c.drawString(50, 750, "FreshScan Detection Report")
+def generate_report(image_path, label, nutrition_info, fallback_text=None):
+    label_clean = label.lower().strip().replace(" ", "_")
+    output_path = f"detector/static/reports/{label_clean}_report.pdf"
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    c.setFont("Helvetica", 12)
-    c.drawString(50, 720, f"Label: {label.title()}")
-    c.drawString(50, 700, f"Calories per 100g: {nutrition_data.get('calories', 'N/A')} kcal")
-    c.drawString(50, 680, f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    c = canvas.Canvas(output_path, pagesize=letter)
+    width, height = letter
 
-    # Nutrition info block
-    c.setFont("Helvetica", 10)
-    text_object = c.beginText(50, 640)
-    text_object.textLine("Nutrition Info:")
-    for key, value in nutrition_data.items():
-        if key != 'purpose':
-            text_object.textLine(f" - {key.title()}: {value}")
-    text_object.textLine("")
-    text_object.textLine(f"Purpose: {nutrition_data.get('purpose', 'N/A')}")
-    c.drawText(text_object)
+    c.setFont("Helvetica-Bold", 20)
+    c.drawString(50, height - 50, f"Nutritional Report: {label.title()}")
 
-    # Attach image if valid
     if os.path.exists(image_path):
-        try:
-            c.drawImage(image_path, 300, 500, width=200, height=150, preserveAspectRatio=True)
-        except Exception:
-            pass
+        c.drawImage(ImageReader(image_path), 50, height - 300, width=200, height=200)
 
-    c.showPage()
+    y = height - 320
+    c.setFont("Helvetica", 12)
+
+    if fallback_text:
+        c.drawString(50, y, "Note: No structured nutrition found. Wikipedia summary:")
+        y -= 20
+        for line in fallback_text.split('\n'):
+            c.drawString(50, y, line)
+            y -= 15
+    else:
+        for key, value in nutrition_info.items():
+            if key != 'purpose':
+                c.drawString(50, y, f"{key.title()}: {value}")
+                y -= 20
+        if 'purpose' in nutrition_info:
+            y -= 10
+            c.drawString(50, y, f"Purpose: {nutrition_info['purpose']}")
+
     c.save()
-    return pdf_name
+    return output_path
