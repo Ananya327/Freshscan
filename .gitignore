@@ -5,5 +5,5 @@ db.sqlite3
 media/
 detector/static/reports/*.pdf
 detector/trained_model/model.h5
-
+dataset/
 
