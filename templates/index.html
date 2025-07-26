@@ -60,6 +60,37 @@
             text-align: left;
             padding-left: 20px;
         }
+
+        /* Loader Styles */
+        #loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #2ecc71;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
     </style>
 </head>
 <body>
@@ -89,32 +120,45 @@
 
         <!-- Right: Nutrition Report -->
         <div class="right-panel">
-           {% if nutrition_info %}
-    <div class="report">
-        <h3>Nutritional Report</h3>
+            {% if nutrition_info %}
+                <div class="report">
+                    <h3>Nutritional Report</h3>
 
-        {% if nutrition_info.error %}
-            <p style="color:red;">{{ nutrition_info.error }}</p>
-        {% elif label_key == "not matching" %}
-            <p style="color:red;">Image not recognized. Please try with a clear fruit or vegetable image.</p>
-        {% else %}
-            <ul>
-                {% for key, value in nutrition_info.items %}
-                    {% if key != 'purpose' %}
-                        <li><strong>{{ key|title }}:</strong> {{ value }}</li>
+                    {% if nutrition_info.error %}
+                        <p style="color:red;">{{ nutrition_info.error }}</p>
+                    {% elif label_key == "not matching" %}
+                        <p style="color:red;">Image not recognized. Please try with a clear fruit or vegetable image.</p>
+                    {% else %}
+                        <ul>
+                            {% for key, value in nutrition_info.items %}
+                                {% if key != 'purpose' %}
+                                    <li><strong>{{ key|title }}:</strong> {{ value }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <p><strong>Purpose:</strong> <em>{{ nutrition_info.purpose }}</em></p>
+
+                        {% if pdf_url %}
+                            <a href="{{ pdf_url }}" class="btn-download" download>📄 Download PDF Report</a>
+                        {% endif %}
                     {% endif %}
-                {% endfor %}
-            </ul>
-            <p><strong>Purpose:</strong> <em>{{ nutrition_info.purpose }}</em></p>
-
-            {% if pdf_url %}
-                <a href="{{ pdf_url }}" class="btn-download" download>📄 Download PDF Report</a>
+                </div>
             {% endif %}
-        {% endif %}
-    </div>
-{% endif %}
-
         </div>
     </div>
+
+    <!-- Loading Spinner -->
+    <div id="loader-overlay">
+        <div>
+            <div class="spinner"></div>
+            <div class="loading-text">Detecting... Please wait</div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector("form").addEventListener("submit", function () {
+            document.getElementById("loader-overlay").style.display = "flex";
+        });
+    </script>
 </body>
 </html>
