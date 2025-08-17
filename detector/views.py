@@ -14,7 +14,8 @@ def index(request):
         image_url = fs.url(filename)
         image_path = fs.path(filename)
 
-        label, calories = predict_fruit_or_vegetable(image_path)
+        label, calories, _ = predict_fruit_or_vegetable(image_path)
+
         label_key = label.lower().strip()
 
         if label_key == "not matching":
