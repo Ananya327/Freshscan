@@ -9,6 +9,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 IMAGE_SIZE = (180, 180)
 EMBEDDING_DB_PATH = "detector/detector/embedding_db.pkl"  # Path to saved embeddings
 THRESHOLD = 0.75  # Similarity threshold
+base_model = MobileNetV2(
+    weights="imagenet",
+    include_top=False,
+    input_shape=(128, 128, 3),
+    alpha=0.35   # try 0.5 first, then 0.35 if you need more speed
+)
 
 # === CALORIE MAP ===
 calorie_map = {
