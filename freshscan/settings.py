@@ -122,7 +122,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 STATICFILES_DIRS = [
+     BASE_DIR / "static",  
     os.path.join(BASE_DIR, 'detector/static'),
+
 ]
 
 
