@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # === CONFIGURATION ===
 IMAGE_SIZE = (180, 180)
-EMBEDDING_DB_PATH = "detector/embedding_db.pkl"  # Path to saved embeddings
+EMBEDDING_DB_PATH = "detector/detector/embedding_db.pkl"  # Path to saved embeddings
 THRESHOLD = 0.75  # Similarity threshold
 
 # === CALORIE MAP ===
