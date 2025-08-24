@@ -14,17 +14,22 @@ def index(request):
         image_url = fs.url(filename)
         image_path = fs.path(filename)
 
-        label, calories, _ = predict_fruit_or_vegetable(image_path)
+        # Get prediction from model
+        label, calories, score = predict_fruit_or_vegetable(image_path)
 
         label_key = label.lower().strip()
 
         if label_key == "not matching":
-            # Unrelated image
+            # 🔥 Force accuracy to 0 if no match
+            accuracy = 0.0
             nutrition_data = {'error': 'No nutrition info found for this item.'}
             wiki_info = get_wikipedia_summary("unknown fruit or vegetable")
             pdf_path = generate_report(image_path, label, {}, fallback_text=wiki_info)
         else:
-            # Matched item
+            # Calculate accuracy normally (convert to %)
+            accuracy = round(score * 100, 2) if score > 0 else 0.0
+
+            # Fetch structured nutrition data
             nutrition_data = get_nutrition_info(label_key)
 
             if 'error' in nutrition_data:
@@ -39,6 +44,7 @@ def index(request):
             'label': label.title(),
             'label_key': label_key,
             'calories': calories,
+            'accuracy': accuracy,   # 🔥 Added accuracy to context
             'image_url': image_url,
             'nutrition_info': nutrition_data,
             'pdf_url': pdf_path.replace('detector/static', '/static') if pdf_path else None
