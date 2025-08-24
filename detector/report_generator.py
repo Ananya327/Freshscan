@@ -8,150 +8,241 @@ import wikipedia
 
 nutrition_map = {
     'apple': {
-        'calories': 52, 'carbohydrates': '14g', 'fat': '0.2g', 'protein': '0.3g',
-        'fiber': '2.4g', 'vitamins': 'Vitamin C, K', 'purpose': 'Supports heart health and weight loss.'
+        'calories': 52,
+        'carbs': 14,
+        'protein': 0.3,
+        'fat': 0.2,
+        'fiber': 2.4,
+        'vitamins': 'Vitamin C, Vitamin K, Potassium',
+        'purpose': 'Boosts immunity, aids digestion, supports heart health'
     },
     'banana': {
-        'calories': 96, 'carbohydrates': '27g', 'fat': '0.3g', 'protein': '1.3g',
-        'fiber': '2.6g', 'vitamins': 'Vitamin B6, C', 'purpose': 'Provides energy and supports digestion.'
+        'calories': 96,
+        'carbs': 27,
+        'protein': 1.3,
+        'fat': 0.3,
+        'fiber': 2.6,
+        'vitamins': 'Vitamin B6, Vitamin C, Potassium',
+        'purpose': 'Provides energy, supports brain health, aids digestion'
+    },
+    'bean': {
+        'calories': 31,
+        'carbs': 7,
+        'protein': 2,
+        'fat': 0.1,
+        'fiber': 3.4,
+        'vitamins': 'Vitamin C, Vitamin K, Folate',
+        'purpose': 'Supports heart health, improves digestion, rich in fiber'
     },
     'beetroot': {
-        'calories': 43, 'carbohydrates': '9.6g', 'fat': '0.2g', 'protein': '1.6g',
-        'fiber': '2.8g', 'vitamins': 'Vitamin C, Folate', 'purpose': 'Supports blood pressure and stamina.'
-    },
-    'bell pepper': {
-        'calories': 31, 'carbohydrates': '6g', 'fat': '0.3g', 'protein': '1g',
-        'fiber': '2.1g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts immunity and eye health.'
+        'calories': 43,
+        'carbs': 10,
+        'protein': 1.6,
+        'fat': 0.2,
+        'fiber': 2.8,
+        'vitamins': 'Folate, Vitamin C, Manganese',
+        'purpose': 'Improves blood flow, lowers blood pressure, boosts stamina'
     },
     'cabbage': {
-        'calories': 25, 'carbohydrates': '6g', 'fat': '0.1g', 'protein': '1.3g',
-        'fiber': '2.5g', 'vitamins': 'Vitamin C, K', 'purpose': 'Promotes digestion and reduces inflammation.'
-    },
-    'capsicum': {
-        'calories': 20, 'carbohydrates': '4.7g', 'fat': '0.2g', 'protein': '0.9g',
-        'fiber': '1.7g', 'vitamins': 'Vitamin C, A', 'purpose': 'Supports metabolism and immune health.'
+        'calories': 25,
+        'carbs': 6,
+        'protein': 1.3,
+        'fat': 0.1,
+        'fiber': 2.5,
+        'vitamins': 'Vitamin C, Vitamin K, Folate',
+        'purpose': 'Supports digestion, reduces inflammation, strengthens immunity'
     },
     'carrot': {
-        'calories': 41, 'carbohydrates': '10g', 'fat': '0.2g', 'protein': '0.9g',
-        'fiber': '2.8g', 'vitamins': 'Vitamin A, K1', 'purpose': 'Good for eye health and immunity.'
+        'calories': 41,
+        'carbs': 10,
+        'protein': 0.9,
+        'fat': 0.2,
+        'fiber': 2.8,
+        'vitamins': 'Vitamin A, Vitamin K, Potassium',
+        'purpose': 'Improves vision, promotes skin health, boosts immunity'
     },
     'cauliflower': {
-        'calories': 25, 'carbohydrates': '5g', 'fat': '0.3g', 'protein': '2g',
-        'fiber': '2g', 'vitamins': 'Vitamin C, K', 'purpose': 'Supports digestion and detoxification.'
+        'calories': 25,
+        'carbs': 5,
+        'protein': 2,
+        'fat': 0.3,
+        'fiber': 2,
+        'vitamins': 'Vitamin C, Vitamin K, Folate',
+        'purpose': 'Supports weight loss, boosts immunity, improves digestion'
     },
-    'chilli pepper': {
-        'calories': 40, 'carbohydrates': '9g', 'fat': '0.4g', 'protein': '2g',
-        'fiber': '1.5g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts metabolism and reduces pain.'
+    'cherry': {
+        'calories': 50,
+        'carbs': 12,
+        'protein': 1,
+        'fat': 0.3,
+        'fiber': 1.6,
+        'vitamins': 'Vitamin C, Potassium, Antioxidants',
+        'purpose': 'Improves sleep, reduces inflammation, supports heart health'
     },
-    'corn': {
-        'calories': 96, 'carbohydrates': '21g', 'fat': '1.5g', 'protein': '3.4g',
-        'fiber': '2.7g', 'vitamins': 'Vitamin B3, B5', 'purpose': 'Provides energy and aids digestion.'
+    'chilli': {
+        'calories': 40,
+        'carbs': 9,
+        'protein': 2,
+        'fat': 0.4,
+        'fiber': 1.5,
+        'vitamins': 'Vitamin C, Vitamin B6, Capsaicin',
+        'purpose': 'Boosts metabolism, reduces pain, improves immunity'
     },
-    'cucumber': {
-        'calories': 16, 'carbohydrates': '3.6g', 'fat': '0.1g', 'protein': '0.7g',
-        'fiber': '0.5g', 'vitamins': 'Vitamin K, C', 'purpose': 'Hydrates and supports skin health.'
+    'coriander': {
+        'calories': 23,
+        'carbs': 4,
+        'protein': 2.1,
+        'fat': 0.5,
+        'fiber': 2.8,
+        'vitamins': 'Vitamin C, Vitamin K, Folate',
+        'purpose': 'Detoxifies body, aids digestion, reduces blood sugar'
     },
-    'eggplant': {
-        'calories': 24, 'carbohydrates': '5.7g', 'fat': '0.2g', 'protein': '1g',
-        'fiber': '3g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Lowers cholesterol and supports weight loss.'
+    'ginger root': {
+        'calories': 80,
+        'carbs': 18,
+        'protein': 1.8,
+        'fat': 0.8,
+        'fiber': 2,
+        'vitamins': 'Vitamin C, Magnesium, Potassium',
+        'purpose': 'Relieves nausea, reduces inflammation, boosts immunity'
     },
-    'garlic': {
-        'calories': 149, 'carbohydrates': '33g', 'fat': '0.5g', 'protein': '6.4g',
-        'fiber': '2.1g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts immunity and reduces blood pressure.'
+    'grape blue': {
+        'calories': 67,
+        'carbs': 17,
+        'protein': 0.6,
+        'fat': 0.4,
+        'fiber': 0.9,
+        'vitamins': 'Vitamin C, Vitamin K, Antioxidants',
+        'purpose': 'Protects heart, improves memory, fights aging'
     },
-    'ginger': {
-        'calories': 80, 'carbohydrates': '18g', 'fat': '0.8g', 'protein': '1.8g',
-        'fiber': '2g', 'vitamins': 'Vitamin B6, C', 'purpose': 'Aids digestion and reduces nausea.'
+    'grape white': {
+        'calories': 69,
+        'carbs': 18,
+        'protein': 0.7,
+        'fat': 0.2,
+        'fiber': 0.9,
+        'vitamins': 'Vitamin C, Vitamin K, Antioxidants',
+        'purpose': 'Boosts immunity, promotes hydration, supports skin health'
     },
-    'grapes': {
-        'calories': 67, 'carbohydrates': '17g', 'fat': '0.4g', 'protein': '0.6g',
-        'fiber': '0.9g', 'vitamins': 'Vitamin C, K', 'purpose': 'Supports heart and brain health.'
-    },
-    'jalepeno': {
-        'calories': 29, 'carbohydrates': '6.5g', 'fat': '0.4g', 'protein': '0.9g',
-        'fiber': '2.8g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts metabolism and pain relief.'
+    'guava': {
+        'calories': 68,
+        'carbs': 14,
+        'protein': 2.6,
+        'fat': 1,
+        'fiber': 5.4,
+        'vitamins': 'Vitamin C, Folate, Potassium',
+        'purpose': 'Improves digestion, boosts immunity, regulates blood sugar'
     },
     'kiwi': {
-        'calories': 61, 'carbohydrates': '15g', 'fat': '0.5g', 'protein': '1.1g',
-        'fiber': '3g', 'vitamins': 'Vitamin C, K', 'purpose': 'Boosts immunity and digestion.'
+        'calories': 61,
+        'carbs': 15,
+        'protein': 1.1,
+        'fat': 0.5,
+        'fiber': 3,
+        'vitamins': 'Vitamin C, Vitamin K, Vitamin E',
+        'purpose': 'Strengthens immunity, aids digestion, improves skin health'
     },
     'lemon': {
-        'calories': 29, 'carbohydrates': '9.3g', 'fat': '0.3g', 'protein': '1.1g',
-        'fiber': '2.8g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Boosts immunity and detoxifies.'
-    },
-    'lettuce': {
-        'calories': 15, 'carbohydrates': '2.9g', 'fat': '0.2g', 'protein': '1.4g',
-        'fiber': '1.3g', 'vitamins': 'Vitamin A, K', 'purpose': 'Supports hydration and weight control.'
+        'calories': 29,
+        'carbs': 9,
+        'protein': 1.1,
+        'fat': 0.3,
+        'fiber': 2.8,
+        'vitamins': 'Vitamin C, Potassium, B-complex',
+        'purpose': 'Boosts immunity, detoxifies body, aids digestion'
     },
     'mango': {
-        'calories': 60, 'carbohydrates': '15g', 'fat': '0.4g', 'protein': '0.8g',
-        'fiber': '1.6g', 'vitamins': 'Vitamin A, C', 'purpose': 'Improves immunity and eye health.'
+        'calories': 60,
+        'carbs': 15,
+        'protein': 0.8,
+        'fat': 0.4,
+        'fiber': 1.6,
+        'vitamins': 'Vitamin A, Vitamin C, Folate',
+        'purpose': 'Improves digestion, boosts immunity, supports eye health'
     },
     'onion': {
-        'calories': 40, 'carbohydrates': '9.3g', 'fat': '0.1g', 'protein': '1.1g',
-        'fiber': '1.7g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Supports heart health and immunity.'
+        'calories': 40,
+        'carbs': 9,
+        'protein': 1.1,
+        'fat': 0.1,
+        'fiber': 1.7,
+        'vitamins': 'Vitamin C, Vitamin B6, Folate',
+        'purpose': 'Boosts heart health, reduces cholesterol, fights infection'
     },
     'orange': {
-        'calories': 47, 'carbohydrates': '12g', 'fat': '0.1g', 'protein': '0.9g',
-        'fiber': '2.4g', 'vitamins': 'Vitamin C, B1', 'purpose': 'Boosts immune system and skin health.'
-    },
-    'paprika': {
-        'calories': 19, 'carbohydrates': '4.5g', 'fat': '0.3g', 'protein': '0.9g',
-        'fiber': '1.8g', 'vitamins': 'Vitamin A, E', 'purpose': 'Boosts eye health and immune function.'
-    },
-    'pear': {
-        'calories': 57, 'carbohydrates': '15g', 'fat': '0.1g', 'protein': '0.4g',
-        'fiber': '3.1g', 'vitamins': 'Vitamin C, K', 'purpose': 'Aids digestion and supports heart health.'
-    },
-    'peas': {
-        'calories': 81, 'carbohydrates': '14g', 'fat': '0.4g', 'protein': '5g',
-        'fiber': '5.7g', 'vitamins': 'Vitamin A, K', 'purpose': 'Supports digestion and immunity.'
+        'calories': 47,
+        'carbs': 12,
+        'protein': 0.9,
+        'fat': 0.1,
+        'fiber': 2.4,
+        'vitamins': 'Vitamin C, Folate, Potassium',
+        'purpose': 'Boosts immunity, supports heart health, hydrates body'
     },
     'pineapple': {
-        'calories': 50, 'carbohydrates': '13g', 'fat': '0.1g', 'protein': '0.5g',
-        'fiber': '1.4g', 'vitamins': 'Vitamin C, B1', 'purpose': 'Aids digestion and reduces inflammation.'
+        'calories': 50,
+        'carbs': 13,
+        'protein': 0.5,
+        'fat': 0.1,
+        'fiber': 1.4,
+        'vitamins': 'Vitamin C, Manganese, Bromelain',
+        'purpose': 'Aids digestion, boosts immunity, reduces inflammation'
     },
     'pomegranate': {
-        'calories': 83, 'carbohydrates': '19g', 'fat': '1.2g', 'protein': '1.7g',
-        'fiber': '4g', 'vitamins': 'Vitamin C, K', 'purpose': 'Boosts heart health and immunity.'
+        'calories': 83,
+        'carbs': 19,
+        'protein': 1.7,
+        'fat': 1.2,
+        'fiber': 4,
+        'vitamins': 'Vitamin C, Vitamin K, Folate',
+        'purpose': 'Improves blood flow, rich in antioxidants, boosts memory'
     },
     'potato': {
-        'calories': 77, 'carbohydrates': '17g', 'fat': '0.1g', 'protein': '2g',
-        'fiber': '2.2g', 'vitamins': 'Vitamin C, B6', 'purpose': 'Provides energy and supports digestion.'
+        'calories': 77,
+        'carbs': 17,
+        'protein': 2,
+        'fat': 0.1,
+        'fiber': 2.2,
+        'vitamins': 'Vitamin C, Vitamin B6, Potassium',
+        'purpose': 'Provides energy, supports digestion, good for skin health'
     },
-    'raddish': {
-        'calories': 16, 'carbohydrates': '3.4g', 'fat': '0.1g', 'protein': '0.7g',
-        'fiber': '1.6g', 'vitamins': 'Vitamin C', 'purpose': 'Supports liver function and digestion.'
+    'radish': {
+        'calories': 16,
+        'carbs': 3.4,
+        'protein': 0.7,
+        'fat': 0.1,
+        'fiber': 1.6,
+        'vitamins': 'Vitamin C, Folate, Potassium',
+        'purpose': 'Supports liver health, improves digestion, detoxifies body'
     },
-    'soy beans': {
-        'calories': 446, 'carbohydrates': '30g', 'fat': '20g', 'protein': '36g',
-        'fiber': '9.3g', 'vitamins': 'Vitamin K, B9', 'purpose': 'Great source of protein and bone health.'
+    'raspberry': {
+        'calories': 52,
+        'carbs': 12,
+        'protein': 1.2,
+        'fat': 0.7,
+        'fiber': 6.5,
+        'vitamins': 'Vitamin C, Manganese, Fiber',
+        'purpose': 'Rich in antioxidants, aids weight loss, improves digestion'
     },
-    'spinach': {
-        'calories': 23, 'carbohydrates': '3.6g', 'fat': '0.4g', 'protein': '2.9g',
-        'fiber': '2.2g', 'vitamins': 'Vitamin A, C, K', 'purpose': 'Boosts iron levels and vision.'
-    },
-    'sweetcorn': {
-        'calories': 86, 'carbohydrates': '19g', 'fat': '1.2g', 'protein': '3.2g',
-        'fiber': '2.7g', 'vitamins': 'Vitamin C, B3', 'purpose': 'Supports digestion and energy.'
-    },
-    'sweetpotato': {
-        'calories': 86, 'carbohydrates': '20g', 'fat': '0.1g', 'protein': '1.6g',
-        'fiber': '3g', 'vitamins': 'Vitamin A, C', 'purpose': 'Good for digestion and blood sugar control.'
+    'strawberry': {
+        'calories': 33,
+        'carbs': 8,
+        'protein': 0.7,
+        'fat': 0.3,
+        'fiber': 2,
+        'vitamins': 'Vitamin C, Manganese, Folate',
+        'purpose': 'Boosts immunity, supports skin health, reduces inflammation'
     },
     'tomato': {
-        'calories': 18, 'carbohydrates': '3.9g', 'fat': '0.2g', 'protein': '0.9g',
-        'fiber': '1.2g', 'vitamins': 'Vitamin C, K', 'purpose': 'Rich in antioxidants and supports heart health.'
-    },
-    'turnip': {
-        'calories': 28, 'carbohydrates': '6.4g', 'fat': '0.1g', 'protein': '0.9g',
-        'fiber': '1.8g', 'vitamins': 'Vitamin C', 'purpose': 'Aids digestion and supports bone health.'
-    },
-    'watermelon': {
-        'calories': 30, 'carbohydrates': '8g', 'fat': '0.2g', 'protein': '0.6g',
-        'fiber': '0.4g', 'vitamins': 'Vitamin C, A', 'purpose': 'Hydrating and supports heart health.'
+        'calories': 18,
+        'carbs': 4,
+        'protein': 0.9,
+        'fat': 0.2,
+        'fiber': 1.2,
+        'vitamins': 'Vitamin C, Vitamin K, Lycopene',
+        'purpose': 'Supports heart health, improves vision, fights cancer cells'
     }
 }
+
 
 
 
