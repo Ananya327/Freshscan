@@ -9,14 +9,13 @@ from sklearn.metrics import accuracy_score, classification_report
 # ==============================
 # CONFIGURATION
 # ==============================
-IMAGE_SIZE = (224, 224)   # ✅ must match embedding.py
+IMAGE_SIZE = (224, 224)   # must match embedding.py
 EMBEDDING_DB_PATH = "detector/detector/embedding_db.pkl"  # fixed path (avoid double detector)
 THRESHOLD = 0.65  # Similarity threshold → if lower than this, mark as "not matching"
 TEST_DATASET_PATH = r"D:\FRASHSCAN 1 - Copy\detector\dataset\Fruits_Vegetables\test"
-# 📌 Path to test dataset (structured as class folders with images inside)
 
 # ==============================
-# CALORIE MAP (updated version)
+# CALORIE MAP
 # ==============================
 calorie_map = {
     'apple': 52, 'banana': 96, 'bean': 31, 'beetroot': 43, 'cabbage': 25,

@@ -20,8 +20,11 @@ for label in os.listdir(DATA_DIR):
 
     print(f"\nProcessing label: {label}")
 
-    for img_name in os.listdir(label_path):
-        img_path = os.path.join(label_path, img_name)
+    for img_name in os.listdir(label_path):source venv/Scripts/activate
+
+        img_path = os.path.join(label_path, img_name)python manage.py runserver
+
+
         try:
             print("  →", img_name)
             img = image.load_img(img_path, target_size=IMAGE_SIZE).convert("RGB")
